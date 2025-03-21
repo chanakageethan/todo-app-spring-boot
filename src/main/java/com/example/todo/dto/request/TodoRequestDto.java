@@ -2,8 +2,6 @@ package com.example.todo.dto.request;
 
 
 import com.example.todo.entity.TodoItem;
-import com.example.todo.entity.User;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -13,7 +11,7 @@ import java.util.Set;
 @ToString
 @Getter
 @Setter
-public class TodoListRequestDto {
+public class TodoRequestDto {
 
 
     private String listName;
@@ -21,6 +19,8 @@ public class TodoListRequestDto {
     private String createdAt;
 
     private String userId;
+
+    private Set<TodoItem> todoItems;
 
 
 }

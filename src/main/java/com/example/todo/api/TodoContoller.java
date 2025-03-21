@@ -1,8 +1,8 @@
 package com.example.todo.api;
 
 
-import com.example.todo.dto.request.TodoListRequestDto;
-import com.example.todo.service.TodoListService;
+import com.example.todo.dto.request.TodoRequestDto;
+import com.example.todo.service.TodoService;
 import com.example.todo.util.StandardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TodoContoller {
 
-    private  final TodoListService todoListService;
+    private  final TodoService todoListService;
 
     @PostMapping
     public ResponseEntity<StandardResponseDto>  saveTodoList(
-            @RequestBody TodoListRequestDto dto
+            @RequestBody TodoRequestDto dto
             ){
 
         todoListService.todoListSave(dto);
