@@ -1,6 +1,7 @@
 package com.example.todo.service.impl;
 
 import com.example.todo.dto.request.TodoRequestDto;
+import com.example.todo.dto.response.TodoListResponseDto;
 import com.example.todo.entity.TodoItem;
 import com.example.todo.entity.TodoList;
 import com.example.todo.entity.User;
@@ -74,6 +75,21 @@ public class TodoServiceImpl implements TodoService {
         todoItemRepo.saveAll(todoItems);
 
 
+    }
+
+    @Override
+    public Set<TodoList>   getTodos() {
+
+//        return TodoListResponseDto.builder()
+//                .todoItems(todoListRepo.getAllTodos())
+//                .build();
+
+        System.out.println("=============");
+
+        Set<TodoList> todoItems = todoListRepo.getAllTodos();
+
+
+        return todoItems;
     }
 
 //

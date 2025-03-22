@@ -1,10 +1,12 @@
 package com.example.todo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
-@Entity(name="todo_item")
+@Entity
+@Table(name = "todo_item")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,6 +33,7 @@ public class TodoItem {
 
     @ManyToOne
     @JoinColumn(name = "list_id")
+    @JsonIgnore
     private TodoList todoList;
 
 

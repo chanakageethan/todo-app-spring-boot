@@ -7,22 +7,19 @@ import com.example.todo.util.StandardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/todos")
 @RequiredArgsConstructor
 public class TodoContoller {
 
-    private  final TodoService todoListService;
+    private final TodoService todoListService;
 
     @PostMapping
-    public ResponseEntity<StandardResponseDto>  saveTodoList(
+    public ResponseEntity<StandardResponseDto> saveTodoList(
             @RequestBody TodoRequestDto dto
-            ){
+    ) {
 
         todoListService.todoListSave(dto);
 
@@ -34,5 +31,23 @@ public class TodoContoller {
                         .build(),
                 HttpStatus.CREATED
         );
+    }
+
+
+    @GetMapping
+    public ResponseEntity<StandardResponseDto> getTodos(){
+
+
+
+
+        return new ResponseEntity<>(
+                StandardResponseDto.builder()
+                        .code(200)
+                        .message("Success")
+                        .data(todoListService.getTodos())
+                        .build(),
+                HttpStatus.CREATED
+        );
+
     }
 }

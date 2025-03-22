@@ -1,11 +1,13 @@
 package com.example.todo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
-@Entity(name="todo_list")
+@Entity
+@Table(name = "todo_list")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,8 +27,9 @@ public class TodoList {
     @Column(name="created_at")
     private String createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)   //prevent user data
     @JoinColumn(name = "user_id")
+    @JsonIgnore  //prevent user data
     private User user;
 
 
