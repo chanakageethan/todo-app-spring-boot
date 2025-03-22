@@ -1,15 +1,19 @@
 package com.example.todo.service.impl;
 
 import com.example.todo.dto.request.TodoRequestDto;
+import com.example.todo.dto.response.ApiResponse;
 import com.example.todo.dto.response.TodoListResponseDto;
 import com.example.todo.entity.TodoItem;
 import com.example.todo.entity.TodoList;
 import com.example.todo.entity.User;
+import com.example.todo.enums.ResponseMessageEnum;
 import com.example.todo.repo.TodoItemRepo;
 import com.example.todo.repo.TodoListRepo;
 import com.example.todo.repo.UserRepo;
 import com.example.todo.service.TodoService;
+import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,73 +27,83 @@ public class TodoServiceImpl implements TodoService {
     private final UserRepo userRepo;
 
     @Override
-    public void todoListSave(TodoRequestDto dto) {
+    public ApiResponse<Object> todoListSave(TodoRequestDto dto) {
+        try {
+            //Todo
+            //need to get id from Token later
+            User user = new User();
+            user.setUserId(dto.getUserId());
 
-        //Todo
-        //need to get id from Token later
-        User user = new User();
-        user.setUserId(dto.getUserId());
-
-        TodoList todoList = new TodoList();
-
-
-        Set<TodoItem> todoItems = new HashSet<>();
-
-        String listId = UUID.randomUUID().toString();
-
-        todoList.setListId(listId);
-        todoList.setListName(dto.getListName());
-        todoList.setCreatedAt(dto.getCreatedAt());
-        todoList.setUser(user);
+            TodoList todoList = new TodoList();
 
 
+            Set<TodoItem> todoItems = new HashSet<>();
 
-        todoList.setTodoItems(todoItems);
+            String listId = UUID.randomUUID().toString();
+
+            todoList.setListId(listId);
+            todoList.setListName(dto.getListName());
+            todoList.setCreatedAt(dto.getCreatedAt());
+            todoList.setUser(user);
+
+
+            todoList.setTodoItems(todoItems);
 
 
 //        todoListRepo.save(toTodoList(dto));
 
 
+            todoListRepo.save(todoList);
 
 
-        todoListRepo.save(todoList);
-
-
-
-
-        for (TodoItem object : dto.getTodoItems()) {
-            TodoItem item = new TodoItem();
-            item.setItemId(UUID.randomUUID().toString());
-            item.setItemName(object.getItemName());
-            item.setDescription(object.getDescription());
+            for (TodoItem object : dto.getTodoItems()) {
+                TodoItem item = new TodoItem();
+                item.setItemId(UUID.randomUUID().toString());
+                item.setItemName(object.getItemName());
+                item.setDescription(object.getDescription());
 //            item.isCompleted(object.isCompleted());
-            item.setCreatedAt(object.getCreatedAt());
-            item.setTodoList(todoList);
+                item.setCreatedAt(object.getCreatedAt());
+                item.setTodoList(todoList);
 
-            todoItems.add(item);
+                todoItems.add(item);
 
+            }
+
+
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("data", todoItemRepo.saveAll(todoItems));
+
+
+            return new ApiResponse<>(true, ResponseMessageEnum.SUCCESS, response);
+
+        } catch (PersistenceException e) {
+            return new ApiResponse<>(false, ResponseMessageEnum.DATABASE_ERROR, "");
         }
-
-
-
-        todoItemRepo.saveAll(todoItems);
 
 
     }
 
     @Override
-    public Set<TodoList>   getTodos() {
+    public ApiResponse<Object> getTodos() {
 
-//        return TodoListResponseDto.builder()
-//                .todoItems(todoListRepo.getAllTodos())
-//                .build();
+        try {
 
-        System.out.println("=============");
+            Set<TodoList> todoItems = todoListRepo.getAllTodos();
 
-        Set<TodoList> todoItems = todoListRepo.getAllTodos();
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("data", todoItems);
 
 
-        return todoItems;
+            return new ApiResponse<>(true, ResponseMessageEnum.SUCCESS, response);
+
+        } catch (PersistenceException e) {
+            return new ApiResponse<>(false, ResponseMessageEnum.DATABASE_ERROR, "");
+        }
+
+//        return todoItems;
+
     }
 
 //

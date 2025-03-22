@@ -2,6 +2,9 @@ package com.example.todo.api;
 
 
 import com.example.todo.dto.request.TodoRequestDto;
+import com.example.todo.dto.response.ApiResponse;
+import com.example.todo.dto.response.TodoListResponseDto;
+import com.example.todo.enums.ResponseMessageEnum;
 import com.example.todo.service.TodoService;
 import com.example.todo.util.StandardResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -35,19 +38,18 @@ public class TodoContoller {
 
 
     @GetMapping
-    public ResponseEntity<StandardResponseDto> getTodos(){
+    public ApiResponse<Object> getTodos() {
 
 
-
-
-        return new ResponseEntity<>(
-                StandardResponseDto.builder()
-                        .code(200)
-                        .message("Success")
-                        .data(todoListService.getTodos())
-                        .build(),
-                HttpStatus.CREATED
-        );
+//        return new ResponseEntity<>(
+//                StandardResponseDto.builder()
+//                        .code(200)
+//                        .message("Success")
+//                        .data(todoListService.getTodos())
+//                        .build(),
+//                HttpStatus.CREATED
+//        );
+        return todoListService.getTodos();
 
     }
 }
